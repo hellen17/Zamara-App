@@ -1,28 +1,19 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View } from 'react-native';
-import MenuScreen from './components/Menu';
+import { useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
+import MenuScreen from './components/Menu';
 
-export default function App() {
+export default function App () {
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  const handleLogout = () => {
+    setLoggedIn(false);
+  };
+
   return (
-    <>
     <NavigationContainer>
-        <MenuScreen />
-    </NavigationContainer>  
-    </>
-
-
+        <MenuScreen loggedIn={loggedIn} handleLogout={handleLogout} />
+ 
+    </NavigationContainer>
   );
-}
-
-const styles = StyleSheet.create({
-  appContainer: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingTop: 50,
-  },
-});
-
+};
 

@@ -12,7 +12,7 @@ const Drawer = createDrawerNavigator();
 const MenuScreen =({loggedIn, handleLogout}) => {
 
   return (
-    <Drawer.Navigator initialRouteName="Login" screenOptions={{ drawerActiveTintColor: '#43AE37' }} >
+    <Drawer.Navigator initialRouteName="Home" screenOptions={{ drawerActiveTintColor: '#43AE37' }} >
       <Drawer.Screen name="Login" component={LoginScreen} />
       <Drawer.Screen name="Home" component={DashboardScreen} options={{ headerTitle: 'Zamara App' }} initialParams={{ username: '', firstname: ''}} />
       <Drawer.Screen name="Staff" component={StaffScreen} />

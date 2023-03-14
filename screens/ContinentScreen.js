@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import xmlJs from 'xml-js';
+import themeColor from '../constants';
 
 const SOAP_URL = 'https://cors-anywhere.herokuapp.com/http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso?WSDL';
 
@@ -53,7 +54,7 @@ export default function ContinentsScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Continents</Text>
+      <Text style={styles.title}>List of Continents</Text>
       {continents.map((continent, index) => (
         <View key={`${continent.sCode}-${index}`} style={styles.continent}>
           <Text style={styles.code}>{continent['m:sCode']._text}</Text>
@@ -68,18 +69,20 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: '',
   },
   title: {
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 20,
+    paddingTop: 20,
   },
   continent: {
     flexDirection: 'row',
     alignItems: 'left',
     padding: 10,
-    backgroundColor: '#eee',
+    width: '100%',
+    backgroundColor: '#fff',
     borderRadius: 5,
     marginBottom: 10,
   },

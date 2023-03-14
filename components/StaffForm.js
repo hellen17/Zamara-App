@@ -10,7 +10,7 @@ export default function StaffForm(props) {
     const [department, setDepartment] = useState('');
     const [salary, setSalary] = useState('');
 
-    const { staffData, isEdit } = props;
+    const { staffData, isEdit, onCancel } = props;
 
     useEffect(() => {
         if (staffData !== null) {
@@ -31,7 +31,7 @@ export default function StaffForm(props) {
     const handleSaveData = () => {
         const data = { staffNumber, staffName, staffEmail, department, salary }
         const method = isEdit ? 'PUT' : 'POST'
-        const url = isEdit ? `https://crudcrud.com/api/b4f9a8cf475148d39e193d92812c4338/zamara/${staffData._id}` : 'https://crudcrud.com/api/b4f9a8cf475148d39e193d92812c4338/zamara'
+        const url = isEdit ? `https://crudcrud.com/api/b4f9a8cf475148d39e193d92812c4338/zamara-test/${staffData._id}` : 'https://crudcrud.com/api/b4f9a8cf475148d39e193d92812c4338/zamara'
         fetch(url, {
             method: method,
             headers: {
@@ -47,17 +47,55 @@ export default function StaffForm(props) {
                 setDepartment('')
                 setSalary('')
                 onCancel()
+
+                //send email notification
+                if (isEdit) {
+                    sendEmailNotification('Profile Notification #Edited', `Greeting ${staffData.staffName}, we are glad to inform you that your staff profile has been updated.`);
+                } else {
+                    sendEmailNotification('Profile Notification #Created', `Greeting ${staffName}, we are glad to inform you that your staff profile has been created.`);
+                }
             })
             //close modal
-            props.onCancel()
             .catch(error => console.log(error))
 
     };
 
+    
+    const sendEmailNotification = (subject, body) => {
+        const emailData = {
+        sender: 'admin@zamara.co.ke',
+        recipients: [staffEmail],
+        subject: subject,
+        text: body
+        }
+        
+        fetch('https://api.smtpbucket.com/emails', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type, Authorization '           
+        },
+        body: JSON.stringify(emailData)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok')
+            }
+            return response.json()
+        })
+        .then(data => console.log('Email notification sent:', data))
+        .catch(error => {
+            console.log('Error sending email',error);
+            throw error;
+        })
+    }
+
     return (
         <Modal visible={props.visible} animationType="slide">
-            <View>
-                <Text style={styles.formTitle}>Staff Form</Text>
+            <View style={styles.formContainer}>
+                <Text style={styles.formTitle}>{ isEdit ? 'Update Staff Form' : 'Add New Staff'}</Text>
                 <View style={styles.inputContainer}>
                     <TextInput placeholder="Enter your Staff Number" style={styles.textInput} value={staffNumber} onChangeText={setStaffNumber} />
                     <TextInput placeholder="Enter your name" style={styles.textInput} value={staffName} onChangeText={setStaffName} />
@@ -66,7 +104,7 @@ export default function StaffForm(props) {
                     <TextInput placeholder="Enter your salary" style={styles.textInput} value={salary} onChangeText={setSalary} />
                     <View style={styles.button}>
                         <Button title={isEdit ? 'Save' : 'Submit'} color="#43AE37" onPress={handleSaveData} />
-                        <Button title="Cancel" color="red" onPress={props.onCancel} />
+                        <Button title="Cancel" color="#E60023" onPress={props.onCancel} />
                     </View>
                  
                 </View>
@@ -81,15 +119,13 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginBottom: 20,
         textAlign: 'center',
+        paddingTop: '8rem',
     },
-
     inputContainer: {
         flex:1,
         justifyContent: 'center',
         alignItems:'center',
-        marginBottom: 20,
-     
-
+        marginBottom: 20,  
     },
     textInput: {
         height: 40,
@@ -103,6 +139,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         width: '60%',
+    },
+    formContainer: {
+        flex: 1,
     }
 
 })

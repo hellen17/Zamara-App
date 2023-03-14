@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useNavigation, NavigationContainer } from '@react-navigation/native'
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Image } from 'react-native';
 import MenuScreen from '../components/Menu';
+import themeColor from '../constants';
 
 export default function LoginScreen(){
     const navigation = useNavigation()
@@ -35,9 +36,9 @@ export default function LoginScreen(){
                     lastname: data.lastName, 
                     email: data.email, 
                     phone: data.phone, 
-                    gender: data.gender
-                   
-
+                    gender: data.gender,
+                    image: data.image
+                
                 })
             
 
@@ -61,20 +62,16 @@ export default function LoginScreen(){
         setPassword('')
     }
 
-    <MenuScreen loggedIn={loggedIn} handleLogout={handleLogout} />
-
-
     return (
         <>
         <View style={styles.container}>
-            <Text style={styles.title}>Login Screen</Text>
+            <Image source={require("../assets/zamara-logo.png")} style={{width: 100, height: 20}} />
+            <Text style={styles.title}>Login to your account</Text>
             <TextInput 
                 placeholder="Username"
                 value={username}
                 onChangeText={setUsername}
-                style={styles.textInput}
-
-                
+                style={styles.textInput}         
             />
             <TextInput
                 placeholder="Password"
@@ -83,7 +80,9 @@ export default function LoginScreen(){
                 secureTextEntry={true}   
                 style={styles.textInput}     
             />
-            <Button title="Login" onPress={handleLogin} />
+            <View style={styles.loginButton}>
+            <Button title="Login" onPress={handleLogin} color={themeColor.primary} />
+            </View>
 
         </View>
 
@@ -97,20 +96,30 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
+        backgroundColor: `${themeColor.secondary}`
     },
     title:{
-        fontSize: 20,
+        fontSize: 14,
         fontWeight: 'bold',
-        marginBottom: 20,
+        textAlign: 'left',
+        marginVertical: 20,
+        color: '#fff',
+
     },
     textInput: {
         height: 40,
         width: '80%',
         borderColor: 'gray',
+        color: '#fff',
         borderWidth: 1,
         marginBottom: 20,
         padding: 10,
         marginBottom: 10,
+    },
+    loginButton: {
+        width: '80%',
+        marginTop: 20,
+        borderRadius: 5,
     }
 
 })
