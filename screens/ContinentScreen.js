@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
   },
   continent: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'left',
     padding: 10,
     backgroundColor: '#eee',
     borderRadius: 5,
